@@ -28,6 +28,11 @@ class UserRepository:
         self.db.execute(stmt)
         self.db.commit()
 
+    def get_users(self) -> list[User]:
+        stmt = sa.select(User)
+        stmt_result = self.db.execute(stmt)
+        return stmt_result.scalars().all()
+
     def get_by_id(self, id: str) -> User:
         stmt = sa.select(User).where(User.id == id)
         stmt_result = self.db.execute(stmt)

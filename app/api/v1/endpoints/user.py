@@ -8,7 +8,11 @@ from app.core.models.api_aux import SuccessOperationSchema
 from app.domains.user.adapters.repository import UserRepository
 from app.providers import hash_provider
 from app.domains.user.domain.user import User, UserRole
-from app.domains.user.models.user_model import UserInputSchema, UserRolesEnum
+from app.domains.user.models.user_model import (
+    UserInputSchema,
+    UserOutputSchema,
+    UserRolesEnum,
+)
 
 
 router = APIRouter()
@@ -50,6 +54,26 @@ def create_user(
     user_repository.create_user(user)
 
     return SuccessOperationSchema(success_detail="Usuário cadastrado com sucesso")
+
+
+@router.get("", status_code=200, response_model=list[UserOutputSchema])
+def get_users(
+    user_repository: UserRepository = Depends(UserRepository),
+    _current_user: User = Depends(get_admin_user),
+):
+    users = user_repository.get_users()
+
+    return [
+        UserOutputSchema(
+            id=str(user.id),
+            name=user.name,
+            cpf=user.cpf,
+            email=user.email,
+            telephone=user.telephone,
+            roles=[role.custom_role for role in user.roles],
+        )
+        for user in users
+    ]
 
 
 @router.post(
