@@ -15,6 +15,7 @@ user_table = sa.Table(
     ),
     sa.Column("name", sa.String, nullable=False),
     sa.Column("cpf", sa.String, nullable=False),
+    sa.Column("password", sa.String, nullable=False),
     sa.Column("email", sa.String, nullable=False),
     sa.Column("telephone", sa.String, nullable=False),
     sa.Column("coins_amount", sa.Integer),
@@ -61,11 +62,11 @@ def start_mappers():
     mapper_registry.map_imperatively(
         User,
         user_table,
-        properties={"user_roles": relationship(UserRole, back_populates="user")},
+        properties={"roles": relationship(UserRole, back_populates="user")},
     )
 
     mapper_registry.map_imperatively(
         UserRole,
         user_role_table,
-        properties={"user": relationship(User, back_populates="user_roles")},
+        properties={"user": relationship(User, back_populates="roles")},
     )
