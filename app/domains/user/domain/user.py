@@ -1,12 +1,12 @@
+from typing import Optional
 from app.core.models.ddd_aux import ImplictDateTime, ImplictId
-from app.domains.user.models.user_model import UserRolesEnum
 
 
 class User:
     id: ImplictId
     date_created: ImplictDateTime
     date_updated: ImplictDateTime
-    roles: list["UserRole"]
+    roles: Optional[list["UserRole"]]
 
     def __init__(
         self,
@@ -23,6 +23,7 @@ class User:
         self.password = password
         self.telephone = telephone
         self.coins_amount = coins_amount
+        self.roles = []
 
     @property
     def is_admin(self) -> bool:
