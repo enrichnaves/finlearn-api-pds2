@@ -1,5 +1,14 @@
-from typing import Optional
+from typing import TYPE_CHECKING, Optional
 from app.core.models.ddd_aux import ImplictDateTime, ImplictId
+
+
+if TYPE_CHECKING:
+    from app.domains.network.domain.network import (
+        Post,
+        Reply,
+        PostValuation,
+        ReplyValuation,
+    )
 
 
 class User:
@@ -7,6 +16,10 @@ class User:
     date_created: ImplictDateTime
     date_updated: ImplictDateTime
     roles: Optional[list["UserRole"]]
+    posts: list["Post"]
+    replies: list["Reply"]
+    posts_valuations: list["PostValuation"]
+    replies_valuations: list["ReplyValuation"]
 
     def __init__(
         self,
@@ -24,6 +37,8 @@ class User:
         self.telephone = telephone
         self.coins_amount = coins_amount
         self.roles = []
+        self.posts = []
+        self.replies = []
 
     @property
     def is_admin(self) -> bool:
@@ -50,6 +65,32 @@ class User:
             raise ValueError("Usuário já possui a Role")
         else:
             self.roles.append(role)
+
+    def pay(self, amount: int, receiver_user: "User") -> None:
+        if (self.coins_amount - amount) < 0:
+            raise ValueError("Moedas insuficientes")
+        receiver_user.coins_amount += amount
+        self.coins_amount -= amount
+
+    def valuate_post(self, post: "Post", is_up: bool) -> "PostValuation":
+        if is_up:
+            try:
+                self.pay(amount=5, receiver_user=post.user)
+            except ValueError as error:
+                raise error
+        valuation = PostValuation(is_up=is_up, user=self, post=post)
+        self.posts_valuations.append(valuation)
+        return valuation
+
+    def valuate_reply(self, reply: "Reply", is_up: bool) -> "ReplyValuation":
+        if is_up:
+            try:
+                self.pay(amount=5, receiver_user=reply.user)
+            except ValueError as error:
+                raise error
+        valuation = ReplyValuation(is_up=is_up, user=self, reply=reply)
+        self.replies_valuations.append(valuation)
+        return valuation
 
 
 class UserRole:
