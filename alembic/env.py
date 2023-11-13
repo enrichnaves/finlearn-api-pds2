@@ -8,6 +8,7 @@ from app.core.entities.base import Base
 from app.config.settings import setting
 
 from app.domains.user.adapters.orm import *  # noqa: F403
+from app.domains.network.adapters.orm import *  # noqa: F403
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
