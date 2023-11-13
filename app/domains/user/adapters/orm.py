@@ -2,6 +2,12 @@ import sqlalchemy as sa
 from sqlalchemy.orm import relationship
 from sqlalchemy.dialects import postgresql
 from app.core.entities.base import Base, mapper_registry
+from app.domains.network.domain.network import (
+    Post,
+    PostValuation,
+    Reply,
+    ReplyValuation,
+)
 from app.domains.user.domain.user import User, UserRole
 
 user_table = sa.Table(
@@ -62,7 +68,13 @@ def start_mappers():
     mapper_registry.map_imperatively(
         User,
         user_table,
-        properties={"roles": relationship(UserRole, back_populates="user")},
+        properties={
+            "roles": relationship(UserRole, back_populates="user"),
+            "posts": relationship(Post, back_populates="user"),
+            "replies": relationship(Reply, back_populates="user"),
+            "posts_valuations": relationship(PostValuation, back_populates="user"),
+            "replies_valuations": relationship(ReplyValuation, back_populates="user"),
+        },
     )
 
     mapper_registry.map_imperatively(
