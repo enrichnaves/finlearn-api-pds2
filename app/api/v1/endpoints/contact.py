@@ -16,7 +16,7 @@ router = APIRouter()
 
 
 @router.post("/create", status_code=201, response_model=SuccessOperationSchema)
-def create_user(
+def create_contact(
     contact_input: ContactInputSchema,
     contact_repository: ContactRepository = Depends(ContactRepository),
 ):
