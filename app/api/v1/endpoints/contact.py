@@ -6,7 +6,7 @@ from app.core.models.api_aux import SuccessOperationSchema
 
 from app.domains.contact.adapters.repository import ContactRepository
 from app.providers import hash_provider
-from app.domains.contact.domain.user import Contact
+from app.domains.contact.domain.contact import Contact
 from app.domains.contact.models.contact_model import (
     ContactInputSchema,
 )
