@@ -4,13 +4,11 @@ from app.core.middleware.error_handler import ErrorModel
 
 from app.core.models.api_aux import SuccessOperationSchema
 
-from app.domains.user.adapters.repository import UserRepository
+from app.domains.contact.adapters.repository import ContactRepository
 from app.providers import hash_provider
-from app.domains.user.domain.user import User, UserRole
-from app.domains.user.models.user_model import (
-    UserInputSchema,
-    UserOutputSchema,
-    UserRolesEnum,
+from app.domains.contact.domain.user import Contact
+from app.domains.contact.models.contact_model import (
+    ContactInputSchema,
 )
 
 
@@ -38,4 +36,4 @@ def create_user(
 
     contact_repository.create_contact(contact)
 
-    return SuccessOperationSchema(success_detail="Usuário cadastrado com sucesso")
+    return SuccessOperationSchema(success_detail="Dúvida cadastrado com sucesso")
